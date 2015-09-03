@@ -1,0 +1,96 @@
+@import "compass/css3";
+@import "font-awesome";
+
+$item-padding: 10px 15px;
+$transition: 0.4s ease;
+
+$color: #554C96;
+
+$min-width: 150px;
+
+.multilevel-dropdown-select {
+  display: none;
+}
+
+.multilevel-dropdown {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  min-width: $min-width;
+  background: white;
+  @include box-shadow(0px 3px 10px -3px black);
+  font-family: Helvetica, 'Arial', sans-serif;
+
+  &, * {
+    @include box-sizing(border-box);
+  }
+
+  .multilevel-dropdown-item {
+    position: relative;
+    list-style: none;
+    padding: $item-padding;
+    cursor: pointer;
+    @include user-select(none);
+    color: $color;
+
+    &.active {
+      background: #EFEFEF;
+      color: black;
+    }
+
+    &.multilevel-dropdown-reset {
+      background: $color;
+      text-align: center;
+      color: white;
+    }
+
+    &.has-children {
+      &.open {
+        background: lighten($color, 10%);
+        color: white;
+
+        & > .multilevel-dropdown-level {
+          margin-top: 0px;
+          visibility: visible;
+          @include opacity(1);
+        }
+
+        &:after {
+          display: none;
+        }
+      }
+
+      &:after {
+        position: absolute;
+        content: '\f105';
+        right: 15px;
+        font-family: 'FontAwesome';
+        top: 10px;
+      }
+    }
+  }
+
+  .multilevel-dropdown-level {
+    position: absolute;
+    top: 0;
+    margin-top: -10px;
+    margin-left: 5px;
+    padding: 0;
+    min-width: $min-width;
+    background: white;
+    @include box-shadow(0px 3px 10px -3px black);
+    visibility: hidden;
+    @include opacity(0);
+    @include transition(opacity $transition, margin $transition);
+
+    .multilevel-dropdown-level-reset {
+      position: relative;
+      margin-left: -5px;
+      padding: $item-padding;
+      list-style: none;
+      text-align: center;
+      background: lighten($color, 10%);
+      color: white;
+    }
+  }
+}

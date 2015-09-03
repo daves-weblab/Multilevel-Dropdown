@@ -6,35 +6,78 @@
 </head>
 
 <body>
-    <ul class="multilevel-dropdown" data-dropdown-name="values">
-        <li data-value="val1">Val1</li>
+<ul class="multilevel-dropdown" data-dropdown-name="values" data-dropdown-value="val2">
+    <li data-value="val1">Val1</li>
 
-        <ul data-label="Group1">
-            <li data-value="val2" data-active>Val2</li>
-            <li data-value="val3">Val3</li>
-        </ul>
-
-        <li data-value="val4">Val4</li>
-
-        <ul data-label="Group2">
-            <li data-value="val5">Val5</li>
-
-            <ul data-label="Group3">
-                <li data-value="val6">Val6</li>
-                <li data-value="val7">Val7</li>
-            </ul>
-        </ul>
-
-        <li data-value="val8">Val8</li>
+    <ul data-label="Group1">
+        <li data-value="val2">Val2</li>
+        <li data-value="val3">Val3</li>
     </ul>
 
-    <script type="text/javascript" src="jquery.js"></script>
-    <script type="text/javascript" src="../multilevel-dropdown.js"></script>
+    <li data-value="val4">Val4</li>
 
-    <script>
-        $('.multilevel-dropdown').multilevelDropdown().on('change', function(event) {
-            console.log($(this).val());
-        });
-    </script>
+    <ul data-label="Group2">
+        <li data-value="val5">Val5</li>
+
+        <ul data-label="Group3">
+            <li data-value="val6">Val6</li>
+            <li data-value="val7">Val7</li>
+        </ul>
+    </ul>
+
+    <li data-value="val8">Val8</li>
+</ul>
+
+<ul class="placeholder"></ul>
+
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../multilevel-dropdown.js"></script>
+
+<script>
+    $('.multilevel-dropdown').multilevelDropdown().on('change', function (event) {
+        console.log($(this).val());
+    });
+
+    $('.placeholder').multilevelDropdown({
+        name: 'placeholder',
+        value: 'val2',
+        data: [{
+            label: 'Val1',
+            value: 'val1'
+        }, {
+            label: 'Group1',
+            children: [
+                {
+                    label: 'Val2',
+                    value: 'val2'
+                }, {
+                    label: 'Val3',
+                    value: 'val3'
+                }
+            ]
+        }, {
+            label: 'Val4',
+            value: 'val4'
+        }, {
+            label: 'Group2',
+            children: [{
+                label: 'Val5',
+                value: 'val5'
+            }, {
+                label: 'Group3',
+                children: [{
+                    label: 'Val6',
+                    value: 'val6'
+                }, {
+                    label: 'Val7',
+                    value: 'val7'
+                }]
+            }]
+        }, {
+            label: 'Val8',
+            value: 'val8'
+        }]
+    });
+</script>
 </body>
 </html>

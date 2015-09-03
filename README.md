@@ -1,7 +1,7 @@
 # Multilevel-Dropdown
 Multilevel Dropdown Plugin for jQuery. Can be setup via HTML or Javascript alone.
 
->This Plugin is currently in version 0.2 and still in development, not for production yet fully.
+>This Plugin is currently in version 0.3 and still in development, not for production yet fully.
 
 
 ## Documentation

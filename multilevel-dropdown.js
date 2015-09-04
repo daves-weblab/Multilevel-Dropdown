@@ -107,8 +107,11 @@
         // check if select exists in the container
         if(this.$select.length == 0) {
             // create select and prepend it in the container
-            this.$select = $(templates.select).attr('name', this.options.name);
             this.$.before(this.$select);
+        }
+
+        if(!this.$select.attr('name')) {
+            this.$select = $(templates.select).attr('name', this.options.name);
         }
 
         // override the level template's close items
@@ -330,22 +333,20 @@
             found = false;
 
         this.$items.each(function() {
-            if(!found) {
-                var $item = $(this);
+            var $item = $(this);
 
-                if ($item.data('value') === value) {
-                    found = true;
-                    $item.addClass(config.classNames.active);
-                    $item.parents('.' + config.classNames.children).addClass(config.classNames.active);
-                    scope.$select.val(value);
-                    scope.setDisplayLabel($item.html());
-                } else {
-                    $item.removeClass(config.classNames.active);
-                }
+            if ($item.data('value') === value) {
+                found = true;
+                $item.addClass(config.classNames.active);
+                $item.parents('.' + config.classNames.children).addClass(config.classNames.active);
+                scope.$select.val(value);
+                scope.setDisplayLabel($item.html());
+            } else {
+                $item.removeClass(config.classNames.active);
             }
         });
 
-        if(!value) {
+        if(!value || !found) {
             this.setDisplayLabel(this.options.labels.placeholder);
             this.$select.val('');
         }

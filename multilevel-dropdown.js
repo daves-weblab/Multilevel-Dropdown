@@ -107,8 +107,11 @@
         // check if select exists in the container
         if(this.$select.length == 0) {
             // create select and prepend it in the container
-            this.$select = $(templates.select).attr('name', this.options.name);
             this.$.before(this.$select);
+        }
+
+        if(!this.$select.attr('name')) {
+            this.$select = $(templates.select).attr('name', this.options.name);
         }
 
         // override the level template's close items

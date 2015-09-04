@@ -330,22 +330,20 @@
             found = false;
 
         this.$items.each(function() {
-            if(!found) {
-                var $item = $(this);
+            var $item = $(this);
 
-                if ($item.data('value') === value) {
-                    found = true;
-                    $item.addClass(config.classNames.active);
-                    $item.parents('.' + config.classNames.children).addClass(config.classNames.active);
-                    scope.$select.val(value);
-                    scope.setDisplayLabel($item.html());
-                } else {
-                    $item.removeClass(config.classNames.active);
-                }
+            if ($item.data('value') === value) {
+                found = true;
+                $item.addClass(config.classNames.active);
+                $item.parents('.' + config.classNames.children).addClass(config.classNames.active);
+                scope.$select.val(value);
+                scope.setDisplayLabel($item.html());
+            } else {
+                $item.removeClass(config.classNames.active);
             }
         });
 
-        if(!value) {
+        if(!value || !found) {
             this.setDisplayLabel(this.options.labels.placeholder);
             this.$select.val('');
         }

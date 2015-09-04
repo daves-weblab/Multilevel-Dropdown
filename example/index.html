@@ -3,10 +3,45 @@
     <title>Multilevel Dropdown</title>
 
     <link rel="stylesheet" type="text/css" href="../css/multilevel-dropdown.css"/>
+
+    <style>
+        body {
+            font-family: Helvetica, 'Arial', sans-serif;
+        }
+
+        body * {
+            font-family: Helvetica, 'Arial', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
-<ul class="multilevel-dropdown" data-dropdown-name="values" data-dropdown-value="val2">
+<div class="multilevel-dropdown-container" data-multilevel-dropdown data-dropdown-name="values" data-dropdown-value="val2" data-dropdown-placeholder="value needed">
+    <ul class="multilevel-dropdown">
+        <li data-value="val1">Val1</li>
+
+        <ul data-label="Group1">
+            <li data-value="val2">Val2</li>
+            <li data-value="val3">Val3</li>
+        </ul>
+
+        <li data-value="val4">Val4</li>
+
+        <ul data-label="Group2">
+            <li data-value="val5">Val5</li>
+
+            <ul data-label="Group3">
+                <li data-value="val6">Value with a very long name :o</li>
+                <li data-value="val7">Val7</li>
+            </ul>
+        </ul>
+
+        <li data-value="val8">Val8</li>
+    </ul>
+</div>
+
+
+<ul data-multilevel-dropdown data-dropdown-value="val2">
     <li data-value="val1">Val1</li>
 
     <ul data-label="Group1">
@@ -28,13 +63,14 @@
     <li data-value="val8">Val8</li>
 </ul>
 
-<ul class="placeholder"></ul>
+
+<div class="placeholder"></div>
 
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="../multilevel-dropdown.js"></script>
 
 <script>
-    $('.multilevel-dropdown').multilevelDropdown().on('change', function (event) {
+    $('[data-multilevel-dropdown]').on('change', function (event) {
         console.log($(this).val());
     });
 

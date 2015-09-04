@@ -6,10 +6,40 @@ $transition: 0.4s ease;
 
 $color: #554C96;
 
-$min-width: 150px;
+$min-width: 200px;
 
 .multilevel-dropdown-container {
   position: relative;
+  display: inline-block;
+  min-width: $min-width;
+  max-width: $min-width;
+
+  .multilevel-dropdown-display {
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    background: $color;
+
+    &:hover {
+      background: darken($color, 10%);
+    }
+
+    .multilevel-dropdown-value {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 80%
+    }
+
+    .multilevel-dropdown-arrow {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      margin-top: -0.5em;
+      line-height: 1;
+    }
+  }
 
   .multilevel-dropdown-select {
     display: none;
@@ -17,12 +47,24 @@ $min-width: 150px;
 
   .multilevel-dropdown {
     position: absolute;
+    top: 2.5em;
+    left: 0;
     padding: 0;
     margin: 0;
+    margin-top: -5px;
     min-width: $min-width;
+    width: 100%;
     background: white;
     @include box-shadow(0px 3px 10px -3px black);
-    font-family: Helvetica, 'Arial', sans-serif;
+    visibility: hidden;
+    @include opacity(0);
+    @include transition(opacity $transition, margin $transition);
+
+    &.open {
+      visibility: visible;
+      @include opacity(1);
+      margin-top: 5px;
+    }
 
     &, * {
       @include box-sizing(border-box);
@@ -36,6 +78,10 @@ $min-width: 150px;
       @include user-select(none);
       color: $color;
 
+      &:hover {
+        background: darken(white, 3%);
+      }
+
       &.active {
         background: #EFEFEF;
         color: black;
@@ -45,6 +91,10 @@ $min-width: 150px;
         background: $color;
         text-align: center;
         color: white;
+
+        &:hover {
+          background: darken($color, 10%);
+        }
       }
 
       &.has-children {
@@ -74,12 +124,14 @@ $min-width: 150px;
     }
 
     .multilevel-dropdown-level {
+      z-index: 1;
       position: absolute;
       top: 0;
       margin-top: -10px;
       margin-left: 5px;
       padding: 0;
       min-width: $min-width;
+      width: 100%;
       background: white;
       @include box-shadow(0px 3px 10px -3px black);
       visibility: hidden;
@@ -94,6 +146,10 @@ $min-width: 150px;
         text-align: center;
         background: lighten($color, 10%);
         color: white;
+
+        &:hover {
+          background: $color;
+        }
       }
     }
   }

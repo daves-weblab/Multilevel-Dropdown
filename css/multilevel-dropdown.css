@@ -2898,84 +2898,51 @@
 /* line 11, ../scss/multilevel-dropdown.scss */
 .multilevel-dropdown-container {
   position: relative;
+  display: inline-block;
+  min-width: 200px;
+  max-width: 200px;
 }
-/* line 14, ../scss/multilevel-dropdown.scss */
+/* line 17, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown-display {
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  background: #554C96;
+}
+/* line 23, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown-display:hover {
+  background: #423b74;
+}
+/* line 27, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown-display .multilevel-dropdown-value {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80%;
+}
+/* line 35, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown-display .multilevel-dropdown-arrow {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  margin-top: -0.5em;
+  line-height: 1;
+}
+/* line 44, ../scss/multilevel-dropdown.scss */
 .multilevel-dropdown-container .multilevel-dropdown-select {
   display: none;
 }
-/* line 18, ../scss/multilevel-dropdown.scss */
+/* line 48, ../scss/multilevel-dropdown.scss */
 .multilevel-dropdown-container .multilevel-dropdown {
   position: absolute;
+  top: 2.5em;
+  left: 0;
   padding: 0;
   margin: 0;
-  min-width: 150px;
-  background: white;
-  -moz-box-shadow: 0px 3px 10px -3px black;
-  -webkit-box-shadow: 0px 3px 10px -3px black;
-  box-shadow: 0px 3px 10px -3px black;
-  font-family: Helvetica, 'Arial', sans-serif;
-}
-/* line 27, ../scss/multilevel-dropdown.scss */
-.multilevel-dropdown-container .multilevel-dropdown, .multilevel-dropdown-container .multilevel-dropdown * {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-/* line 31, ../scss/multilevel-dropdown.scss */
-.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item {
-  position: relative;
-  list-style: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  -moz-user-select: -moz-none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-  color: #554C96;
-}
-/* line 39, ../scss/multilevel-dropdown.scss */
-.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.active {
-  background: #EFEFEF;
-  color: black;
-}
-/* line 44, ../scss/multilevel-dropdown.scss */
-.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.multilevel-dropdown-reset {
-  background: #554C96;
-  text-align: center;
-  color: white;
-}
-/* line 51, ../scss/multilevel-dropdown.scss */
-.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.has-children.open {
-  background: #6e64b1;
-  color: white;
-}
-/* line 55, ../scss/multilevel-dropdown.scss */
-.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.has-children.open > .multilevel-dropdown-level {
-  margin-top: 0px;
-  visibility: visible;
-  filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
-  opacity: 1;
-}
-/* line 61, ../scss/multilevel-dropdown.scss */
-.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.has-children.open:after {
-  display: none;
-}
-/* line 66, ../scss/multilevel-dropdown.scss */
-.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.has-children:after {
-  position: absolute;
-  content: '\f105';
-  right: 15px;
-  font-family: 'FontAwesome';
-  top: 10px;
-}
-/* line 76, ../scss/multilevel-dropdown.scss */
-.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-level {
-  position: absolute;
-  top: 0;
-  margin-top: -10px;
-  margin-left: 5px;
-  padding: 0;
-  min-width: 150px;
+  margin-top: -5px;
+  min-width: 200px;
+  width: 100%;
   background: white;
   -moz-box-shadow: 0px 3px 10px -3px black;
   -webkit-box-shadow: 0px 3px 10px -3px black;
@@ -2988,7 +2955,97 @@
   -webkit-transition: opacity 0.4s ease, margin 0.4s ease;
   transition: opacity 0.4s ease, margin 0.4s ease;
 }
-/* line 89, ../scss/multilevel-dropdown.scss */
+/* line 63, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown.open {
+  visibility: visible;
+  filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+  opacity: 1;
+  margin-top: 5px;
+}
+/* line 69, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown, .multilevel-dropdown-container .multilevel-dropdown * {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* line 73, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item {
+  position: relative;
+  list-style: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  color: #554C96;
+}
+/* line 81, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item:hover {
+  background: #f7f7f7;
+}
+/* line 85, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.active {
+  background: #EFEFEF;
+  color: black;
+}
+/* line 90, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.multilevel-dropdown-reset {
+  background: #554C96;
+  text-align: center;
+  color: white;
+}
+/* line 95, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.multilevel-dropdown-reset:hover {
+  background: #423b74;
+}
+/* line 101, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.has-children.open {
+  background: #6e64b1;
+  color: white;
+}
+/* line 105, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.has-children.open > .multilevel-dropdown-level {
+  margin-top: 0px;
+  visibility: visible;
+  filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+  opacity: 1;
+}
+/* line 111, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.has-children.open:after {
+  display: none;
+}
+/* line 116, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-item.has-children:after {
+  position: absolute;
+  content: '\f105';
+  right: 15px;
+  font-family: 'FontAwesome';
+  top: 10px;
+}
+/* line 126, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-level {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  margin-top: -10px;
+  margin-left: 5px;
+  padding: 0;
+  min-width: 200px;
+  width: 100%;
+  background: white;
+  -moz-box-shadow: 0px 3px 10px -3px black;
+  -webkit-box-shadow: 0px 3px 10px -3px black;
+  box-shadow: 0px 3px 10px -3px black;
+  visibility: hidden;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -moz-transition: opacity 0.4s ease, margin 0.4s ease;
+  -o-transition: opacity 0.4s ease, margin 0.4s ease;
+  -webkit-transition: opacity 0.4s ease, margin 0.4s ease;
+  transition: opacity 0.4s ease, margin 0.4s ease;
+}
+/* line 141, ../scss/multilevel-dropdown.scss */
 .multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-level .multilevel-dropdown-level-reset {
   position: relative;
   margin-left: -5px;
@@ -2997,4 +3054,8 @@
   text-align: center;
   background: #6e64b1;
   color: white;
+}
+/* line 150, ../scss/multilevel-dropdown.scss */
+.multilevel-dropdown-container .multilevel-dropdown .multilevel-dropdown-level .multilevel-dropdown-level-reset:hover {
+  background: #554C96;
 }

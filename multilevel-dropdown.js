@@ -19,12 +19,15 @@
             levelReset: 'multilevel-dropdown-level-reset',
             open: 'open',
             active: 'active',
+            container: 'multilevel-dropdown-container',
             level: 'multilevel-dropdown-level',
-            item: 'multilevel-dropdown-item'
+            item: 'multilevel-dropdown-item',
+            displayValue: 'multilevel-dropdown-value'
         },
 
         // data attributes for the dropdown
         data: {
+            data: 'dropdown-data',
             name: 'dropdown-name',
             value: 'dropdown-value'
         }
@@ -32,7 +35,8 @@
 
     // various templates
     var templates = {
-        container: '<div class="multilevel-dropdown-container"><div class="multilevel-dropdown-display"><span class="multilevel-dropdown-value"></span> <i class="fa fa-angle-bottom"></i></div></div>',
+        container: '<div class="'+ config.classNames.container +'"></div>',
+        display: '<div class="multilevel-dropdown-display"><span class="multilevel-dropdown-value"></span> <i class="multilevel-dropdown-arrow fa fa-angle-down"></i></div>',
         level: '<ul class="' + config.classNames.level + '"><li class="' + config.classNames.levelReset + '">##label##</li></ul>',
         item: '<li class="' + config.classNames.item + '"></li>',
         select: '<select class="multilevel-dropdown-select"></select>'
@@ -50,33 +54,62 @@
      * @constructor
      */
     var MultilevelDropdown = function (element, options) {
-        // store jQuery element internal
-        this.$ = element.addClass(config.classNames.root);
+        if(!element.is('ul')) {
+            // element is no <ul> treat it as a container
+            this.$container = element.addClass(config.classNames.container);
 
-        // create container element
-        this.$container = $(templates.container);
-        //prepend it in the DOM
-        this.$.before(this.$container);
+            this.$ = this.$container.children('ul');
 
-        // move the dropdown inside the container
-        this.$.appendTo(this.$container);
+            if(this.$.length == 0) {
+                this.$ = $('<ul>');
+                this.$container.append(this.$);
+            }
+        } else {
+            // element is a <ul>, create a container for it
+            this.$ = element;
+
+            // create container element
+            this.$container = $(templates.container);
+            //prepend it in the DOM
+            this.$.before(this.$container);
+
+            // move the dropdown inside the container
+            this.$.appendTo(this.$container);
+        }
+
+        this.$trigger = element;
 
         // default options
         this.options = {
-            name: this.$.data(config.data.name),
-            value: this.$.data(config.data.value),
+            name: element.data(config.data.name),
+            value: element.data(config.data.value),
             labels: {
                 reset: '<i class="fa fa-trash"></i>',
-                close: '<i class="fa fa-angle-left"></i>'
+                close: '<i class="fa fa-angle-left"></i>',
+                placeholder: element.data('dropdown-placeholder') || 'select a value'
             }
         };
 
         // override options
         $.extend(true, this.options, options);
 
-        // create select and prepend it in the container
-        this.$select = $(templates.select).attr('name', this.options.name);
-        this.$.before(this.$select);
+        this.$display = $(templates.display);
+        this.$displayLabel = this.$display.find('.' + config.classNames.displayValue).html(this.options.labels.placeholder);
+        this.$container.prepend(this.$display);
+
+        this.bindDisplayEvent();
+
+        // store jQuery element internal
+        this.$.addClass(config.classNames.root);
+
+        this.$select = this.$container.find('select');
+
+        // check if select exists in the container
+        if(this.$select.length == 0) {
+            // create select and prepend it in the container
+            this.$select = $(templates.select).attr('name', this.options.name);
+            this.$.before(this.$select);
+        }
 
         // override the level template's close items
         templates.level = templates.level.replace('##label##', this.options.labels.close);
@@ -84,13 +117,14 @@
         // read data if none has been given for construction
         if (!this.options.data) {
             this.options.data = [];
+
             this.readData(this.$.children(), this.options.data);
         }
 
         // prepend a reset button
         this.options.data.unshift({
             label: this.options.labels.reset,
-            value: false
+            value: ''
         });
 
         // build the dropdowns HTML
@@ -98,8 +132,16 @@
 
         // set a selected value if one has been given
         if (this.options.value) {
-            this.setValue(this.options.value);
+            this.setValue(this.options.value, false);
         }
+    };
+
+    MultilevelDropdown.prototype.bindDisplayEvent = function() {
+        var scope = this;
+
+        this.$display.on('click', function() {
+            scope.$.toggleClass(config.classNames.open);
+        });
     };
 
     /**
@@ -190,12 +232,15 @@
                     .html(item.label);
 
                 // if it's value is false, it is defined as a reset button
-                if (item.value === false) {
+                if (item.value === '') {
                     $item.addClass(config.classNames.reset);
                 }
 
-                // add the new option to the internal select, so the value is able to be selected
-                this.$select.append('<option value="' + item.value + '">' + item.label + '</option>');
+                // check if select already has the value
+                if(this.$select.find('option[value="'+ item.value +'"]').length == 0) {
+                    // add the new option to the internal select, so the value is able to be selected
+                    this.$select.append('<option value="' + item.value + '">' + item.label + '</option>');
+                }
             }
 
             // append level to the dropdown
@@ -242,13 +287,26 @@
             } else {
                 // item was a simple item
                 // set the new value
-                scope.setValue($item.data('value'));
+                scope.setValue($item.data('value'), true);
+                scope.close();
             }
         });
     };
 
     MultilevelDropdown.prototype.addDataset = function (dataset) {
         // TODO
+    };
+
+    MultilevelDropdown.prototype.open = function() {
+        this.$.addClass(config.classNames.open);
+    };
+
+    MultilevelDropdown.prototype.close = function() {
+        this.$.removeClass(config.classNames.open);
+    };
+
+    MultilevelDropdown.prototype.toggle = function() {
+        this.$.toggle();
     };
 
     /**
@@ -267,21 +325,38 @@
      * @param value
      *  the value to set
      */
-    MultilevelDropdown.prototype.setValue = function (value) {
-        this.$items.each(function() {
-            var $item = $(this);
+    MultilevelDropdown.prototype.setValue = function (value, trigger) {
+        var scope = this,
+            found = false;
 
-            if($item.data('value') === value) {
-                $item.addClass(config.classNames.active);
-                $item.parents('.' + config.classNames.children).addClass(config.classNames.active);
-            } else  {
-                $item.removeClass(config.classNames.active);
+        this.$items.each(function() {
+            if(!found) {
+                var $item = $(this);
+
+                if ($item.data('value') === value) {
+                    found = true;
+                    $item.addClass(config.classNames.active);
+                    $item.parents('.' + config.classNames.children).addClass(config.classNames.active);
+                    scope.$select.val(value);
+                    scope.setDisplayLabel($item.html());
+                } else {
+                    $item.removeClass(config.classNames.active);
+                }
             }
         });
 
-        this.$select.val(value);
+        if(!value) {
+            this.setDisplayLabel(this.options.labels.placeholder);
+            this.$select.val('');
+        }
 
-        this.$.trigger('change');
+        if(trigger) {
+            this.$trigger.trigger('change');
+        }
+    };
+
+    MultilevelDropdown.prototype.setDisplayLabel = function(label) {
+        this.$displayLabel.html(label);
     };
 
     /**
@@ -327,17 +402,66 @@
         }
     };
 
-    $.fn.multilevelDropdown = function (parameter) {
-        var dropdown = this.data('multilevel-dropdown');
+    // old val hook for div elements
+    var divHook = $.valHooks.div;
 
-        if (dropdown && dropdown[parameter]) {
-            // dropdown was constructed, and a valid method was given
-            return dropdown[parameter].apply(dropdown, Array.prototype.slice.call(arguments, 1));
-        } else if(!dropdown) {
-            // dropdown was not constructed yet
-            this.data('multilevel-dropdown', new MultilevelDropdown(this, parameter));
+    /**
+     * override the div hook, if a container was used to initialize the plugin
+     *
+     * @type {{get: Function, set: Function}}
+     */
+    $.valHooks.div = {
+        get: function (el) {
+            var $el = $(el);
+
+            if ($el.hasClass(config.classNames.container)) {
+                return $el.multilevelDropdown('getValue');
+            } else if(divHook) {
+                // call old ul hook
+                return divHook.get(el);
+            }
+        },
+
+        set: function (el, val) {
+            var $el = $(el);
+
+            if ($el.hasClass(config.classNames.container)) {
+                $el.multilevelDropdown('setValue', val);
+            } else if(divHook) {
+                // call old ul hook
+                divHook.set(el, val);
+            }
+
+            return el;
         }
+    };
+
+    $.fn.multilevelDropdown = function (parameter) {
+        if(this.length == 0) return;
+
+        var returnValue = null;
+
+        this.each(function() {
+            if(returnValue === null) {
+                var $this = $(this);
+                var dropdown = $this.data('multilevel-dropdown');
+
+                if (dropdown && dropdown[parameter]) {
+                    // dropdown was constructed, and a valid method was given
+                    returnValue = dropdown[parameter].apply(dropdown, Array.prototype.slice.call(arguments, 1));
+                } else if (!dropdown) {
+                    // dropdown was not constructed yet
+                    $this.data('multilevel-dropdown', new MultilevelDropdown($this, parameter));
+                }
+            }
+        });
+
+        if(returnValue !== null) return returnValue;
 
         return this;
     }
+
+    $(function() {
+        $('[data-multilevel-dropdown]').multilevelDropdown();
+    });
 })(jQuery);
